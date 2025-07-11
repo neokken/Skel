@@ -60,7 +60,10 @@ void VoxelSpaceGame::Render(skel::Renderer& renderer)
 	//m_screen->Box(position, position + skel::int2{10, 10}, 0xffffffff);
 	//m_screen->Bar(position, position + skel::int2{10, 10}, 0xffffffff);
 
-	m_testImage->CopyTo(position, m_screen.get());
+
+	float imagexpos = (-cos(m_totalTime * .2) * .5f + .5f) *172 - static_cast<float>(m_testImage->GetWidth()) - 1.f;
+
+	m_testImage->CopyTo({ static_cast<int>(imagexpos),50}, m_screen.get());
 
 	m_lastMousePosition = position;
 	renderer.BlitSurface(m_screen.get(), 0, 0);
