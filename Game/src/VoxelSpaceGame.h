@@ -15,8 +15,15 @@ public:
 
 private:
 	float m_totalTime{ 0.f };
+	skel::int2 m_lastMousePosition{ 0 };
+
+
+	
 
 	uint m_clearColor;
+	
+
+	std::unique_ptr<skel::Surface> m_testImage{ nullptr };
 
 	std::unique_ptr<skel::Surface> m_screen{ nullptr };
 

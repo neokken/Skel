@@ -22,6 +22,7 @@ project "SkelFramework"
         "../external/glfw/include",
         "../external/imgui",
         "../external/spdlog/include",
+        "../external/stbimage/include",
     }
 
     links { "glad", "GLFW", "imgui", "opengl32.lib" }

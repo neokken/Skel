@@ -7,7 +7,8 @@ namespace skel
 class Surface
 {
 public:
-    Surface(int32_t width, int32_t height, bool needGPUTexture=true);
+    Surface(int32_t width, int32_t height, bool needGPUTexture);
+    Surface(const std::string& file, bool needGPUTexture);
     ~Surface();
 
     Surface(const Surface& other) = delete;
@@ -19,10 +20,20 @@ public:
 
     void Clear(uint color);
 
-    void Plot(int x, int y, uint32_t color);
+    void Plot(int x, int y, uint color);
+    void Plot(const int2& p, uint color);
 
+    void Line(int x1, int y1, int x2, int y2, uint color);
+    void Line(const int2& p1, const int2& p2, uint color);
 
+    void CopyTo(int x, int y, Surface* d) const;
+    void CopyTo(const int2& p, Surface* d) const;
 
+    void Box(int x1, int y1, int x2, int y2, uint color);   // only draws outline of box
+    void Box(const int2& p1, const int2& p2, uint color);   // only draws outline of box
+
+    void Bar(int x1, int y1, int x2, int y2, uint color);
+    void Bar(const int2& p1, const int2& p2, uint color);
 
     void UpdateGPUTexture();
     uint32_t GetTextureID();
