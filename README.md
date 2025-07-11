@@ -1,2 +1,2 @@
 # Skel
-Skel is a small and simple C++ framework for building real-time interactive projects
+Skel is a small C++ framework for building real-time interactive applications, including games, tools, and prototypes
