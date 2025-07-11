@@ -2,8 +2,8 @@
 	path = external/imgui
 	url = https://github.com/neokken/imgui
 	branch = docking
-[submodule "external/glfw"]
-	path = external/glfw
+[submodule "external/GLFW"]
+	path = external/GLFW
 	url = https://github.com/neokken/glfw
 	branch = master
 [submodule "external/spdlog"]
