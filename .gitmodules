@@ -1,0 +1,12 @@
+[submodule "external/imgui"]
+	path = external/imgui
+	url = https://github.com/neokken/imgui
+	branch = docking
+[submodule "external/glfw"]
+	path = external/glfw
+	url = https://github.com/neokken/glfw
+	branch = master
+[submodule "external/spdlog"]
+	path = external/spdlog
+	url = https://github.com/neokken/spdlog
+	branch = v1.x
