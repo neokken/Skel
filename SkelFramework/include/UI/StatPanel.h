@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "UI/UIPanel.h"
+#include <deque>
 
 namespace skel
 {

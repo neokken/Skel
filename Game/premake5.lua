@@ -20,6 +20,11 @@ project "Game"
         "../external/glad/include",
         "../external/spdlog/include", 
         "../external/imgui", 
+        "../external/irrKlang/include", 
+    }
+
+    libdirs {
+        "../external/irrKlang/lib"
     }
 
     links {
@@ -27,7 +32,12 @@ project "Game"
         "GLFW",
         "glad",
         "opengl32.lib",
+        "irrKlang.lib",
         "imgui"
+    }
+
+    postbuildcommands {
+        ('{COPY} "../external/irrKlang/lib/irrKlang.dll" "%{cfg.targetdir}"')
     }
 
     filter "configurations:Debug"
