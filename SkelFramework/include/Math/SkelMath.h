@@ -308,7 +308,23 @@ inline float2 lerp(const float2& a, const float2& b, const float t) { return a *
 inline float3 lerp(const float3& a, const float3& b, const float t) { return a * (1.f - t) + b * t; }
 inline float4 lerp(const float4& a, const float4& b, const float t) { return a * (1.f - t) + b * t; }
 
-    // casting to other types
+
+// casting to other types
+
+inline int2 ToInt2(const uint2& value) { return { static_cast<int>(value.x),static_cast<int>(value.y) }; }
+inline int2 ToInt2(const float2& value) { return { static_cast<int>(value.x),static_cast<int>(value.y) }; }
+inline int2 ToInt2Floor(const float2& value) { return { static_cast<int>(std::floor(value.x)),static_cast<int>(std::floor(value.y)) }; }
+inline int2 ToInt2Ceil(const float2& value) { return { static_cast<int>(std::ceil(value.x)),static_cast<int>(std::ceil(value.y)) }; }
+inline int2 ToInt2Round(const float2& value) { return { static_cast<int>(std::round(value.x)),static_cast<int>(std::round(value.y)) }; }
+
+inline uint2 ToUInt2(const int2& value ) { return { static_cast<uint>(value.x),static_cast<uint>(value.y) }; }
+inline uint2 ToUInt2(const float2& value ) { return { static_cast<uint>(value.x),static_cast<uint>(value.y) }; }
+inline uint2 ToUInt2Floor(const float2& value ) { return { static_cast<uint>(std::floor(value.x)),static_cast<uint>(std::floor(value.y)) }; }
+inline uint2 ToUInt2Ceil(const float2& value ) { return { static_cast<uint>(std::ceil(value.x)),static_cast<uint>(std::ceil(value.y)) }; }
+inline uint2 ToUInt2Round(const float2& value ) { return { static_cast<uint>(std::round(value.x)),static_cast<uint>(std::round(value.y)) }; }
+
+inline float2 ToFloat2(const int2& value) { return { static_cast<float>(value.x),static_cast<float>(value.y) }; }
+inline float2 ToFloat2(const uint2& value) { return { static_cast<float>(value.x),static_cast<float>(value.y) }; }
 
 
 }
