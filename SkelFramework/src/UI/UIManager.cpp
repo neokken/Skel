@@ -146,6 +146,6 @@ void skel::UIManager::SetupDockspace()
 		ImGui::DockBuilderFinish(dockspace_id);
 	}
 
-	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingInCentralNode);
 	ImGui::End();
 }

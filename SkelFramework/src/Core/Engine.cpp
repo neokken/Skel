@@ -24,6 +24,11 @@ void skel::Engine::Run(GameBase& game)
         glfwPollEvents();
 
         // Update game
+        if (m_consoleToggleKey!=0 && m_inputManager.IsKeyJustDown(m_consoleToggleKey,true))
+        {
+            m_console->SetEnabled(!m_console->IsEnabled());
+        }
+
 
 
         game.Update(deltaTime);
@@ -132,6 +137,7 @@ int skel::Engine::Initialize()
 
     SKEL_CORE_INFO("[Window] " + std::to_string(width) + " x " + std::to_string(height) + " | " + mode);
 
+    m_consoleToggleKey = m_game->GetStartupSettings().consoleToggleKey;
 
     m_uiManager.Initialize(m_window);
     m_renderer = new Renderer(m_game->GetStartupSettings().rendererWidth, m_game->GetStartupSettings().rendererHeight);
@@ -143,7 +149,11 @@ int skel::Engine::Initialize()
     m_uiManager.RegisterPanel(m_viewportPanel);
     m_uiManager.RegisterPanel(m_console);
     m_uiManager.RegisterPanel(m_statsPanel);
-    m_statsPanel->SetEnabled(false);
+    m_statsPanel->SetEnabled(m_game->GetStartupSettings().showStatsPanelOnStartup);
+
+
+    m_console->SetEnabled(m_game->GetStartupSettings().showConsolePanelOnStartup);
+
 
     SKEL_CORE_INFO("[RenderTarget] " + std::to_string(m_renderer->GetWidth()) + " x " + std::to_string(m_renderer->GetHeight()));
 
@@ -166,7 +176,7 @@ int skel::Engine::InitializeGLFW()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_window = glfwCreateWindow(m_windowWidth, m_windowHeight, m_applicationTitle.c_str(), nullptr, nullptr);
+    m_window = glfwCreateWindow(m_windowWidth, m_windowHeight, m_game->GetStartupSettings().windowTitle.c_str(), nullptr, nullptr);
     if (m_window == nullptr)
     {
         SKEL_CORE_CRITICAL("Failed to create GLFW m_window");

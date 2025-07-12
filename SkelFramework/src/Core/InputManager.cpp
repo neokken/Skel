@@ -88,42 +88,42 @@ void skel::InputManager::Update(float deltaTime)
 	m_scrollDelta = 0.f;
 }
 
-bool skel::InputManager::IsKeyDown(const int key) const
+bool skel::InputManager::IsKeyDown(const int key, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_keys[key] == KeyState::Just_Down || m_keys[key] == KeyState::Down;
+	return (ignoreBlocked ||Engine::GetInstance().GetViewport().IsFocused()) && m_keys[key] == KeyState::Just_Down || m_keys[key] == KeyState::Down;
 }
 
-bool skel::InputManager::IsKeyUp(const int key) const
+bool skel::InputManager::IsKeyUp(const int key, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_keys[key] == KeyState::Just_Up || m_keys[key] == KeyState::Up;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_keys[key] == KeyState::Just_Up || m_keys[key] == KeyState::Up;
 }
 
-bool skel::InputManager::IsKeyJustDown(const int key) const
+bool skel::InputManager::IsKeyJustDown(const int key, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_keys[key] == KeyState::Just_Down;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_keys[key] == KeyState::Just_Down;
 }
 
-bool skel::InputManager::IsKeyJustUp(const int key) const
+bool skel::InputManager::IsKeyJustUp(const int key, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_keys[key] == KeyState::Just_Up;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_keys[key] == KeyState::Just_Up;
 }
 
-bool skel::InputManager::IsMouseDown(const int button) const
+bool skel::InputManager::IsMouseDown(const int button, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_mouseButtons[button] == KeyState::Just_Down || m_mouseButtons[button] == KeyState::Down;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_mouseButtons[button] == KeyState::Just_Down || m_mouseButtons[button] == KeyState::Down;
 }
 
-bool skel::InputManager::IsMouseUp(const int button) const
+bool skel::InputManager::IsMouseUp(const int button, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_mouseButtons[button] == KeyState::Just_Up || m_mouseButtons[button] == KeyState::Up;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_mouseButtons[button] == KeyState::Just_Up || m_mouseButtons[button] == KeyState::Up;
 }
 
-bool skel::InputManager::IsMouseJustDown(const int button) const
+bool skel::InputManager::IsMouseJustDown(const int button, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_mouseButtons[button] == KeyState::Just_Down;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_mouseButtons[button] == KeyState::Just_Down;
 }
 
-bool skel::InputManager::IsMouseJustUp(const int button) const
+bool skel::InputManager::IsMouseJustUp(const int button, const bool ignoreBlocked) const
 {
-	return Engine::GetInstance().GetViewport().IsFocused() && m_mouseButtons[button] == KeyState::Just_Up;
+	return (ignoreBlocked || Engine::GetInstance().GetViewport().IsFocused()) && m_mouseButtons[button] == KeyState::Just_Up;
 }

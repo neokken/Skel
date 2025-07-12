@@ -1,5 +1,7 @@
 #pragma once
 
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
 
 namespace skel
 {
@@ -33,18 +35,18 @@ namespace skel
 	void Update(float deltaTime);
 
 
-	[[nodiscard]] bool IsKeyDown(int key) const;
-	[[nodiscard]] bool IsKeyUp(int key) const;
-	[[nodiscard]] bool IsKeyJustDown(int key) const;
-	[[nodiscard]] bool IsKeyJustUp(int key) const;
+	[[nodiscard]] bool IsKeyDown(int key, bool ignoreBlocked=false) const;
+	[[nodiscard]] bool IsKeyUp(int key, bool ignoreBlocked = false) const;
+	[[nodiscard]] bool IsKeyJustDown(int key, bool ignoreBlocked = false) const;
+	[[nodiscard]] bool IsKeyJustUp(int key, bool ignoreBlocked = false) const;
 
 
-	[[nodiscard]] bool IsMouseDown(const int button) const;
-	[[nodiscard]] bool IsMouseUp(const int button) const;
+	[[nodiscard]] bool IsMouseDown(const int button, bool ignoreBlocked = false) const;
+	[[nodiscard]] bool IsMouseUp(const int button, bool ignoreBlocked = false) const;
 
-	[[nodiscard]] bool IsMouseJustDown(const int button) const;
+	[[nodiscard]] bool IsMouseJustDown(const int button, bool ignoreBlocked = false) const;
 
-	[[nodiscard]] bool IsMouseJustUp(const int button) const;
+	[[nodiscard]] bool IsMouseJustUp(const int button, bool ignoreBlocked = false) const;
 	
 	
 	[[nodiscard]] const int2& GetMousePosition() const { return m_mousePosition; }					// Render target position

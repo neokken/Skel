@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -17,15 +17,24 @@ namespace skel
 
 	struct EngineInitValues
 	{
+		std::string windowTitle{ "Skel App" };
+
 		int startupWindowWidth{ 800 };
 		int startupWindowHeight{ 600 };
+		//bool startFullscreen{ false }; currently we don't handle fullscreen yet.
 
-		int rendererWidth{ 800 };
-		int rendererHeight{ 600 };
 
+		int  rendererWidth{ 800 };
+		int  rendererHeight{ 600 };
 		bool vsyncEnabled{ false };
-	};
 
+
+		bool showConsolePanelOnStartup{ true };
+		bool showStatsPanelOnStartup{ true };
+
+		int consoleToggleKey{ GLFW_KEY_GRAVE_ACCENT };	// set to 0 to disable
+	};
+	
 
 
 	class Engine
@@ -88,14 +97,13 @@ namespace skel
 
 		GLFWwindow* m_window{ nullptr };
 
-		std::string m_applicationTitle{"Skel"};
-
-
 		int m_windowWidth{800};
 		int m_windowHeight{600};
 		bool m_VSyncEnabled{false};
 
 		bool m_shouldClose{ false };
+
+		int m_consoleToggleKey{ 0 };
 
 		GameBase* m_game{ nullptr };
 
