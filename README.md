@@ -14,10 +14,12 @@ Skel is a small C++ framework for building real-time interactive applications, u
 
 1. **Clone with submodules**:
    ```bash
-   git clone --recurse-submodules [https://github.com/yourname/skel.git](https://github.com/neokken/Skel)
+   git clone --recurse-submodules https://github.com/neokken/Skel
    ```
 2. **Generate the Visual Studio solution**<br>
    Simply run the batch script: GenerateProject.bat
    
-4. **Open Skel.sln and build Game**.<br>
+3. **Open Skel.sln and build Game**.<br>
    Press F5 to run the application, and watch example in action
+
+> Tip: Switch to the metalgearExample branch for a larger sample (warning: rough code ahead!).
