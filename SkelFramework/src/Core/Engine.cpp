@@ -146,9 +146,9 @@ int skel::Engine::Initialize()
 
     m_statsPanel = std::make_shared<StatPanel>(600);
 
-    m_uiManager.RegisterPanel(m_viewportPanel);
     m_uiManager.RegisterPanel(m_console);
     m_uiManager.RegisterPanel(m_statsPanel);
+    m_uiManager.RegisterPanel(m_viewportPanel);
     m_statsPanel->SetEnabled(m_game->GetStartupSettings().showStatsPanelOnStartup);
 
 
