@@ -7,7 +7,7 @@ namespace skel
 class Surface
 {
 public:
-    Surface(int32_t width, int32_t height, bool needGPUTexture);
+    Surface(int width, int height, bool needGPUTexture);
     Surface(const std::string& file, bool needGPUTexture);
     ~Surface();
 
@@ -41,8 +41,8 @@ public:
 
     // when editing values with it will not be marked as dirty so you need to manually mark it.
     uint32_t* GetBuffer() { return m_pixels; }
-    uint32_t GetWidth() const { return m_width; }
-    uint32_t GetHeight() const { return m_height; }
+    int GetWidth() const { return m_width; }
+    int GetHeight() const { return m_height; }
 
     void MarkAsDirty() { m_dirty = true; }
 private:
@@ -50,7 +50,7 @@ private:
 
 private:
     uint32_t* m_pixels = nullptr;
-    int32_t m_width = 0, m_height = 0;
+    int m_width = 0, m_height = 0;
 
     uint32_t m_textureID = 0;
     bool m_dirty = true;

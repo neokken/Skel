@@ -16,7 +16,7 @@
 // helper macro for line clipping
 #define OUTCODE(x,y) (((x)<xmin)?1:(((x)>xmax)?2:0))+(((y)<ymin)?4:(((y)>ymax)?8:0))
 
-skel::Surface::Surface(const int32_t width, const int32_t height, const bool needGPUTexture)
+skel::Surface::Surface(const int width, const int height, const bool needGPUTexture)
 	: m_width(width)
 	, m_height(height)
 {

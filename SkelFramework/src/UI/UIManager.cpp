@@ -9,7 +9,6 @@
 // ReSharper disable once CppMemberFunctionMayBeStatic
 void skel::UIManager::Initialize(GLFWwindow* window)
 {
-    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
@@ -18,12 +17,10 @@ void skel::UIManager::Initialize(GLFWwindow* window)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    // Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 450");  // or your GLSL version string
+    ImGui_ImplOpenGL3_Init("#version 450");
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
@@ -67,10 +64,8 @@ void skel::UIManager::BeginFrame()
 
 void skel::UIManager::Render()
 {
-    // Setup and show dockspace root window first
 	SetupDockspace();
 
-	// Render all registered panels
 	for (const auto& entry : m_panels)
 	{
 		if (entry.panel && entry.panel->IsEnabled())
@@ -132,11 +127,9 @@ void skel::UIManager::SetupDockspace()
 		ImGuiID dock_main_id = dockspace_id;
 		ImGuiID dock_id_right = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Right, 0.2f, nullptr, &dock_main_id);
 
-		// Dock windows
 		ImGui::DockBuilderDockWindow("Viewport", dock_main_id);
 		ImGui::DockBuilderDockWindow("Console", dock_id_right);
 
-		// Now disable tab bar on the viewport dock node so no title/tab appears
 		ImGuiDockNode* viewportNode = ImGui::DockBuilderGetNode(dock_main_id);
 		if (viewportNode)
 		{

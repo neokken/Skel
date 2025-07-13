@@ -2,10 +2,10 @@
 #include "Core/GameBase.h"
 #include "Renderer/Surface.h"
 
-class VoxelSpaceGame : public skel::GameBase
+class ExampleGame : public skel::GameBase
 {
 public:
-	VoxelSpaceGame() = default;
+	ExampleGame() = default;
 
 	skel::EngineInitValues GetStartupSettings() override;
 
@@ -14,18 +14,14 @@ public:
 	void Render(skel::Renderer& renderer) override;
 
 private:
-	float m_totalTime{ 0.f };
-	skel::int2 m_lastMousePosition{ 0 };
-
-
-	
-
-	uint m_clearColor;
-	
-
+	std::unique_ptr<skel::Surface> m_screen{ nullptr };
 	std::unique_ptr<skel::Surface> m_testImage{ nullptr };
 
-	std::unique_ptr<skel::Surface> m_screen{ nullptr };
+	float m_totalTime = 0;
 
+	
+	skel::float2 ballPos{ 100, 100 };
+	skel::float2 ballVel{ 60, 45 };
+	skel::int2 ballSize;
 };
 
