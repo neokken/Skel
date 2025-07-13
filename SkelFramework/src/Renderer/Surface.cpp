@@ -78,7 +78,7 @@ void skel::Surface::Clear(const uint color)
 	m_dirty = true;
 }
 
-void skel::Surface::Plot(const int x, const int y, const uint32_t color)
+void skel::Surface::Plot(const int x, const int y, const uint color)
 {
 	if (x < 0 || y < 0 || x >= static_cast<int>(m_width) || y >= static_cast<int>(m_height)) return;
 	m_pixels[y * m_width + x] = color;
@@ -90,17 +90,17 @@ void skel::Surface::Plot(const int2& p, const uint color)
 	Plot(p.x, p.y, color);
 }
 
-void skel::Surface::Line(int x1i, int y1i, int x2i, int y2i, uint color)
+void skel::Surface::Line(const int x1, const int y1, const int x2, const int y2, const uint color)
 {
-	float x1 = static_cast<float>(x1i);
-	float y1 = static_cast<float>(y1i);
-	float x2 = static_cast<float>(x2i);
-	float y2 = static_cast<float>(y2i);
+	float x1f = static_cast<float>(x1);
+	float y1f = static_cast<float>(y1);
+	float x2f = static_cast<float>(x2);
+	float y2f = static_cast<float>(y2);
 
 
 	// clip (Cohen-Sutherland, https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm)
-	const float xmin = 0, ymin = 0, xmax = (float)m_width - 1, ymax = (float)m_height - 1;
-	int c0 = OUTCODE(x1, y1), c1 = OUTCODE(x2, y2);
+	const float xmin = 0, ymin = 0, xmax = static_cast<float>(m_width) - 1, ymax = static_cast<float>(m_height) - 1;
+	int c0 = OUTCODE(x1f, y1f), c1 = OUTCODE(x2f, y2f);
 	bool accept = false;
 	while (1)
 	{
@@ -109,21 +109,24 @@ void skel::Surface::Line(int x1i, int y1i, int x2i, int y2i, uint color)
 		{
 			float x = 0, y = 0;
 			const int co = c0 ? c0 : c1;
-			if (co & 8) x = x1 + (x2 - x1) * (ymax - y1) / (y2 - y1), y = ymax;
-			else if (co & 4) x = x1 + (x2 - x1) * (ymin - y1) / (y2 - y1), y = ymin;
-			else if (co & 2) y = y1 + (y2 - y1) * (xmax - x1) / (x2 - x1), x = xmax;
-			else if (co & 1) y = y1 + (y2 - y1) * (xmin - x1) / (x2 - x1), x = xmin;
-			if (co == c0) x1 = x, y1 = y, c0 = OUTCODE(x1, y1);
-			else x2 = x, y2 = y, c1 = OUTCODE(x2, y2);
+			if (co & 8) x = x1f + (x2f - x1f) * (ymax - y1f) / (y2f - y1f), y = ymax;
+			else if (co & 4) x = x1f + (x2f - x1f) * (ymin - y1f) / (y2f - y1f), y = ymin;
+			else if (co & 2) y = y1f + (y2f - y1f) * (xmax - x1f) / (x2f - x1f), x = xmax;
+			else if (co & 1) y = y1f + (y2f - y1f) * (xmin - x1f) / (x2f - x1f), x = xmin;
+			if (co == c0) x1f = x, y1f = y, c0 = OUTCODE(x1f, y1f);
+			else x2f = x, y2f = y, c1 = OUTCODE(x2f, y2f);
 		}
 	}
 	if (!accept) return;
-	float b = x2 - x1, h = y2 - y1, l = fabsf(b);
+	const float b = x2f - x1f;
+	const float h = y2f - y1f;
+	float l = fabsf(b);
 	if (fabsf(h) > l) l = fabsf(h);
-	int il = (int)l;
-	float dx = b / (float)l, dy = h / (float)l;
-	for (int i = 0; i <= il; i++, x1 += dx, y1 += dy)
-		*(m_pixels + (int)x1 + (int)y1 * m_width) = color;
+	const int il = static_cast<int>(l);
+	const float dx = b / l;
+	const float dy = h / l;
+	for (int i = 0; i <= il; i++, x1f += dx, y1f += dy)
+		*(m_pixels + static_cast<int>(x1f) + static_cast<int>(y1f) * m_width) = color;
 
 	m_dirty = true;
 }
