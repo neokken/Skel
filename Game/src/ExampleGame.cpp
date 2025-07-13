@@ -44,12 +44,12 @@ void ExampleGame::Update(const float deltaTime)
 
 	ballPos += ballVel * deltaTime;
 
-	if (ballPos.x < 0 || ballPos.x + ballSize.x > m_screen->GetWidth())
+	if (ballPos.x < 0 || ballPos.x + static_cast<float>(ballSize.x) > static_cast<float>(m_screen->GetWidth()))
 	{
 		ballVel.x = -ballVel.x;
 		ballPos.x = std::clamp(ballPos.x, 0.f, static_cast<float>(m_screen->GetWidth() - ballSize.x));
 	}
-	if (ballPos.y < 0 || ballPos.y + ballSize.y > m_screen->GetHeight())
+	if (ballPos.y < 0 || ballPos.y + static_cast<float>(ballSize.y) > static_cast<float>(m_screen->GetHeight()))
 	{
 		ballVel.y = -ballVel.y;
 		ballPos.y = std::clamp(ballPos.y, 0.f, static_cast<float>(m_screen->GetHeight() - ballSize.y));
@@ -66,12 +66,10 @@ void ExampleGame::Update(const float deltaTime)
 
 void ExampleGame::Render(skel::Renderer& renderer)
 {
-	// Shift background hue each second
-	skel::float3 bg = skel::HSVtoRGB(fmodf(m_totalTime * 0.1f, 1.f), .7f, .7f);
+	const skel::float3 bg = skel::HSVtoRGB(fmodf(m_totalTime * 0.1f, 1.f), .7f, .7f);
 	m_screen->Clear(skel::ColorToUint32(skel::float4(bg, 1.f)));
 
-	// Draw sprite
-	m_testImage->CopyTo({ int(ballPos.x), int(ballPos.y) }, m_screen.get());
+	m_testImage->CopyTo({ static_cast<int>(ballPos.x), static_cast<int>(ballPos.y) }, m_screen.get());
 
 
 	renderer.BlitSurface(m_screen.get(), 0, 0);
