@@ -77,7 +77,7 @@ int skel::Engine::Initialize()
 
 
     SKEL_CORE_INFO("--------------------------------------");
-    SKEL_CORE_INFO("|          SKEL FRAMEWORK v0.1       |");
+    SKEL_CORE_INFO("|          SKEL FRAMEWORK v1.0       |");
     SKEL_CORE_INFO("--------------------------------------");
 
 
