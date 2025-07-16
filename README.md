@@ -10,6 +10,8 @@ Skel is a small C++ framework for building real-time interactive applications, u
 - Input management via GLFW
 - Easy-to-extend game loop
 
+![GIF](https://github.com/neokken/Skel/blob/main/exampleGif/Game_tRn5j2sCWa.gif)
+
 ## Installation
 
 1. **Clone with submodules**:
@@ -24,7 +26,7 @@ Skel is a small C++ framework for building real-time interactive applications, u
 
 > Tip: Switch to the metalgearExample branch for a larger sample (warning: rough code ahead!).
 
-
+> 
 ## Quickstart
 
 ### Extend GameBase
