@@ -85,7 +85,7 @@ void ExampleGame::Render(skel::Renderer& renderer)
 	m_testImage->CopyTo({ static_cast<int>(ballPos.x), static_cast<int>(ballPos.y) }, m_screen.get());
 
 
-	m_screen->Circle(static_cast<int>(ballPos.x + ballSize.x / 2), static_cast<int>(ballPos.y + ballSize.y / 2), m_circleRadius+1, 0xffFFCF56, 1);
+	m_screen->Circle(static_cast<int>(ballPos.x + ballSize.x / 2), static_cast<int>(ballPos.y + ballSize.y / 2), m_circleRadius, 0xffFFCF56, 1);
 
 	renderer.BlitSurface(m_screen.get(), 0, 0);
 }
