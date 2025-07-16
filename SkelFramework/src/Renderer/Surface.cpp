@@ -1,7 +1,7 @@
-#include "skelpch.h"
+﻿#include "skelpch.h"
 #include "Renderer/Surface.h"
 
-#include <GL/gl.h>
+
 
 #include <algorithm>
 
@@ -10,6 +10,10 @@
 #define STBI_NO_PIC
 #define STBI_NO_PNM
 
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+
+#include "glad/glad.h"
 #include "stbimage/stb_image.h"
 
 
@@ -51,14 +55,14 @@ skel::Surface::Surface(const std::string& file, bool needGPUTexture)
 	{
 		for (int i = 0; i < s; i++)
 		{
-			m_pixels[i] = data[i * 4 + 3] << 24 | data[i * 4 + 2] << 16 | data[i * 4 + 1] << 8 | data[i * 4 + 0];  
+			m_pixels[i] = data[i * 4 ] << 24 | data[i * 4 + 1] << 16 | data[i * 4 + 2] << 8 | data[i * 4 + 3];  
 		}
 	}
 	else
 	{
 		for (int i = 0; i < s; i++)
 		{
-			m_pixels[i] = (255 << 24) | data[i * n + 2] << 16 | data[i * n + 1] << 8 | data[i * n + 0];
+			m_pixels[i] = (255 << 24) | data[i * n ] << 16 | data[i * n + 1] << 8 | data[i * n + 2];
 		}
 	}
 	// free stb_image data
@@ -168,48 +172,190 @@ void skel::Surface::CopyTo(const int2& p, Surface* d) const
 	CopyTo(p.x, p.y, d);
 }
 
-void skel::Surface::Box(const int x1, const int y1, const int x2, const int y2, const uint color)
-{
-	Line(x1, y1, x2, y1, color);
-	Line(x2, y1, x2, y2, color);
-	Line(x1, y2, x2, y2, color);
-	Line(x1, y1, x1, y2, color);
-	m_dirty = true;
-}
 
-void skel::Surface::Box(const int2& p1, const int2& p2, const uint color)
+void skel::Surface::Rectangle(const int x1, const int y1, const int x2, const int y2, const uint color, int strokeWidth)
 {
-	Box(p1.x, p1.y, p2.x, p2.y, color);
-}
+	if (strokeWidth < 0) strokeWidth = 0;
 
-void skel::Surface::Bar(int x1, int y1, int x2, int y2, const uint color)
-{
-	// clipping
-	x1 = std::max(x1, 0);
-	x2 = std::min(x2, m_width - 1);
-	y1 = std::max(y1, 0);
-	y2 = std::min(y2, m_height - 1);
+	const int x1s = std::min(x1, x2);
+	const int x2s = std::max(x1, x2);
+	const int y1s = std::min(y1, y2);
+	const int y2s = std::max(y1, y2);
 
-	// draw clipped bar
-	uint* a = x1 + y1 * m_width + m_pixels;
-	for (int y = y1; y <= y2; y++)
+	if (x1s >= m_width || x2s < 0 || y1s >= m_height || y2s < 0) return;
+
+	if (x2s - x1s < strokeWidth || y2s - y1s < strokeWidth) strokeWidth = 0;
+
+	const int x1c = std::max(x1s, 0);
+	const int x2c = std::min(x2s, m_width - 1);
+	const int y1c = std::max(y1s, 0);
+	const int y2c = std::min(y2s, m_height - 1);
+
+
+	if (strokeWidth == 0)
 	{
-		for (int x = 0; x <= (x2 - x1); x++) a[x] = color;
-		a += m_width;
+		for (int y = y1c; y <= y2c; y++)
+		{
+			for (int x = x1c; x <= x2c;x++)
+			{
+				m_pixels[y * m_width + x] = color;
+			}
+		}
+
+		m_dirty = true;
+		return;
 	}
+
+	// width based
+
+	Rectangle(x1s, y1s, x2s, y1s + strokeWidth - 1, color, 0);
+
+	Rectangle(x1s, y2s - strokeWidth + 1, x2s, y2s, color, 0);
+
+
+	Rectangle(x1s, y1s + strokeWidth - 1 , x1s + strokeWidth - 1, y2s - strokeWidth + 1, color, 0);
+	Rectangle(x2s - strokeWidth + 1, y1s + strokeWidth - 1 , x2s, y2s - strokeWidth + 1, color, 0);
+
 	m_dirty = true;
 }
 
-void skel::Surface::Bar(const int2& p1, const int2& p2, const uint color)
+void skel::Surface::Rectangle(const int2& p1, const int2& p2, const uint color, const int strokeWidth)
 {
-	Bar(p1.x, p1.y, p2.x, p2.y, color);
+	Rectangle(p1.x, p1.y, p2.x, p2.y, color, strokeWidth);
 }
+
+void skel::Surface::Circle(const int cx, const int cy, const int radius, const uint color, int strokeWidth)
+{
+	// ripped out from an old project. but there has to be a better/cleaner way
+
+	if (radius == 0) { Plot(cx, cy, color); return; }
+	if (radius < 0) return;
+	
+
+	if (strokeWidth > radius)
+		strokeWidth = 0;
+
+	auto drawOctants = [&](int x, int y, uint color, int centerX, int centerY)
+		{
+			Plot(x + centerX, y + centerY, color);
+			Plot(-x + centerX, y + centerY, color);
+			Plot(x + centerX, -y + centerY, color);
+			Plot(-x + centerX, -y + centerY, color);
+
+			// If the generated point is on the line x = y then 
+			// the perimeter points have already been printed
+			if (x != y)
+			{
+				Plot(y + centerX, x + centerY, color);
+				Plot(-y + centerX, x + centerY, color);
+				Plot(y + centerX, -x + centerY, color);
+				Plot(-y + centerX, -x + centerY, color);
+			}
+		};
+
+	strokeWidth = strokeWidth == 0 ? radius + 1 : strokeWidth - 1;
+
+	int x = radius;
+	int y = 0;
+
+	// we add the thickness to the radius because we want the thickness to go outward
+
+	// Initialising the value of P
+	int p = 1 - radius;
+
+
+	for (int i = 0; i <= strokeWidth; i++)
+	{
+		drawOctants(radius - i, 0, color, cx, cy);
+	}
+
+	while (x > y)
+	{
+		y++;
+
+		// Mid-point is inside or on the perimeter
+		if (p <= 0)
+		{
+			p = p + 2 * y + 1;
+		}
+		else
+		{
+			// Mid-point is outside the perimeter
+			x--;
+			p = p + 2 * y - 2 * x + 1;
+		}
+
+		// All the perimeter points have already been printed
+		if (x < y)
+			break;
+
+
+
+		for (int i = 0; i <= strokeWidth; i++)
+		{
+			drawOctants(x - i, y, color, cx, cy);
+		}
+
+
+	}
+
+
+	if (strokeWidth == 0 || strokeWidth > radius)
+		return;
+
+	x = radius - strokeWidth;
+	y = 0;
+
+	p = 1 - (radius - strokeWidth);
+
+	for (int i = 0; i <= strokeWidth; i++)
+	{
+		drawOctants(radius - strokeWidth + i, 0, color, cx, cy);
+	}
+
+	while (x > y)
+	{
+		y++;
+
+		// Mid-point is inside or on the perimeter
+		if (p <= 0)
+		{
+			p = p + 2 * y + 1;
+		}
+		else
+		{
+			// Mid-point is outside the perimeter
+			x--;
+			p = p + 2 * y - 2 * x + 1;
+		}
+
+		// All the perimeter points have already been printed
+		if (x < y)
+			break;
+
+
+
+		for (int i = 0; i <= strokeWidth; i++)
+		{
+			drawOctants(x + i, y, color, cx, cy);
+			drawOctants(x, y + i, color, cx, cy);
+		}
+	}
+
+	m_dirty = true;
+}
+
+void skel::Surface::Circle(const int2& center, const int radius, const uint color, const int strokeWidth)
+{
+	Circle(center.x, center.y, radius, color, strokeWidth);
+}
+
 
 void skel::Surface::UpdateGPUTexture()
 {
 	if (!m_dirty || m_textureID==0) return;
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, m_pixels);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, m_width, m_height, GL_BGRA, GL_UNSIGNED_BYTE, m_pixels);
 	m_dirty = false;
 }
 
@@ -223,7 +369,7 @@ void skel::Surface::InitTexture()
 {
 	glGenTextures(1, &m_textureID);
 	glBindTexture(GL_TEXTURE_2D, m_textureID);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_width, m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, nullptr);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }

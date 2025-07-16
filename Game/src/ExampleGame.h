@@ -19,6 +19,8 @@ private:
 
 	float m_totalTime = 0;
 
+	int m_circleRadius = 0;
+
 	
 	skel::float2 ballPos{ 100, 100 };
 	skel::float2 ballVel{ 60, 45 };

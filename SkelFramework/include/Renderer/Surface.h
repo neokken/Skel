@@ -29,11 +29,11 @@ public:
     void CopyTo(int x, int y, Surface* d) const;
     void CopyTo(const int2& p, Surface* d) const;
 
-    void Box(int x1, int y1, int x2, int y2, uint color);   // only draws outline of box
-    void Box(const int2& p1, const int2& p2, uint color);   // only draws outline of box
+    void Rectangle(int x1, int y1, int x2, int y2, uint color, int strokeWidth = 0);
+    void Rectangle(const int2& p1, const int2& p2, uint color, int strokeWidth = 0);
 
-    void Bar(int x1, int y1, int x2, int y2, uint color);
-    void Bar(const int2& p1, const int2& p2, uint color);
+    void Circle(int cx, int cy, int radius, uint color, int strokeWidth = 0);
+    void Circle(const int2& center, int radius, uint color, int strokeWidth = 0);
 
     void UpdateGPUTexture();
     uint32_t GetTextureID();

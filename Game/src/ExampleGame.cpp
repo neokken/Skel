@@ -37,6 +37,17 @@ void ExampleGame::Update(const float deltaTime)
 {
 	const auto& input = skel::Engine::GetInstance().GetInput();
 
+	if (input.GetScrollDelta() > 0)
+	{
+		m_circleRadius++;
+	}
+	else if (input.GetScrollDelta() < 0)
+	{
+		m_circleRadius--;
+	}
+
+	m_circleRadius = std::max(0, m_circleRadius);
+
 	if (input.IsKeyDown(GLFW_KEY_RIGHT)) ballVel.x += 200.f * deltaTime;
 	if (input.IsKeyDown(GLFW_KEY_LEFT))  ballVel.x -= 200.f * deltaTime;
 	if (input.IsKeyDown(GLFW_KEY_UP))    ballVel.y -= 200.f * deltaTime;
@@ -66,11 +77,15 @@ void ExampleGame::Update(const float deltaTime)
 
 void ExampleGame::Render(skel::Renderer& renderer)
 {
+	const auto& input = skel::Engine::GetInstance().GetInput();
+
 	const skel::float3 bg = skel::HSVtoRGB(fmodf(m_totalTime * 0.1f, 1.f), .7f, .7f);
 	m_screen->Clear(skel::ColorToUint32(skel::float4(bg, 1.f)));
 
 	m_testImage->CopyTo({ static_cast<int>(ballPos.x), static_cast<int>(ballPos.y) }, m_screen.get());
 
+
+	m_screen->Circle(static_cast<int>(ballPos.x + ballSize.x / 2), static_cast<int>(ballPos.y + ballSize.y / 2), m_circleRadius+1, 0xffFFCF56, 1);
 
 	renderer.BlitSurface(m_screen.get(), 0, 0);
 }
