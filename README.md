@@ -6,8 +6,8 @@ Skel is a small C++ framework for building real-time interactive applications, u
 
 - Pixel-perfect 2D surface rendering
 - Minimal math types (`float2`, `int2`, etc.)
-- Built-in console & stat panels (ImGui)
-- Input management via GLFW
+- Built-in console
+- Input management
 - Easy-to-extend game loop
 
 ![GIF](https://github.com/neokken/Skel/blob/main/exampleGif/Game_tRn5j2sCWa.gif)
